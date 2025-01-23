@@ -1,0 +1,11 @@
+2025-01-22 20:52:45,414:ERROR:Error loading data from data/cs-train/ts-data/ts-all.csv: [Errno 2] No such file or directory: 'data/cs-train/ts-data/ts-all.csv'
+2025-01-22 20:53:14,747:INFO:Data loaded successfully from ../data/cs-train/ts-data/ts-all.csv
+2025-01-22 20:53:14,765:INFO:Summary statistics generated successfully
+2025-01-22 20:53:15,050:INFO:Missing values heatmap saved successfully
+2025-01-22 20:53:15,050:ERROR:Error plotting price distribution: 'price'
+2025-01-22 20:53:15,051:ERROR:Error plotting times_viewed distribution: 'times_viewed'
+2025-01-22 20:53:15,051:ERROR:Error plotting total_price distribution: 'total_price'
+2025-01-22 20:53:15,245:INFO:Correlation matrix plot saved successfully
+2025-01-22 20:53:15,245:ERROR:Error plotting monthly revenue: "None of [Index(['year', 'month', 'day'], dtype='object')] are in the [columns]"
+2025-01-22 20:53:15,245:ERROR:Error plotting country revenue: 'country'
+2025-01-22 20:53:15,245:ERROR:Error plotting customer revenue: 'customer_id'

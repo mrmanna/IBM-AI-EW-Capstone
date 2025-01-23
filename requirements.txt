@@ -1,0 +1,9 @@
+flask
+pandas
+numpy
+scikit-learn
+matplotlib
+joblib
+requests
+protobuf==3.20.*
+tensorflow-gpu
