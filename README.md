@@ -12,14 +12,14 @@
 - Can all of the unit tests be run with a single script and do all of the unit tests pass?
   - Yes, [Unit Test Script](scripts/test_api.py)
 
-Is there a mechanism to monitor performance?
-- Yes, [Unit Test Script](scripts/test_api.py)
+- Is there a mechanism to monitor performance?
+  - Yes, [Unit Test Script](scripts/test_api.py)
 
 - Was there an attempt to isolate the read/write unit tests from production models and logs?
   - Yes, [Unit Test Script](scripts/test_api.py)
 
-Does the API work as expected? For example, can you get predictions for a specific country as well as for all countries combined?
-- Yes, [API Script](scripts/api.py)
+- Does the API work as expected? For example, can you get predictions for a specific country as well as for all countries combined?
+  - Yes, [API Script](scripts/api.py)
 
 - Does the data ingestion exists as a function or script to facilitate automation?
   - Yes, [Data Ingestion Script](scripts/cslib.py)
@@ -39,13 +39,13 @@ Does the API work as expected? For example, can you get predictions for a specif
   ![Base](scripts/visualizations/withoutfinetune_revenue_projection_vs_actual.png)
   - Finetuned RF model
   ![RF](scripts/visualizations/rf_revenue_projection_vs_actual.png)
-  - Finetuned LSTM model
+  - Finetuned LSTM model (5 days)
   ![LSTM](scripts/visualizations/lstm1_revenue_projection_vs_actual.png)
   
   ---
-  
+
 ### Assimilate the Business Scenario and Articulate Testable Hypotheses
-## Part 1
+
 ### Business Scenario
 AAVAIL, a company that initially launched with a tiered, subscription-based service, has experimented with an à la carte approach to revenue generation, primarily outside the US. This experiment has generated transaction-level purchase data across 38 different countries over a couple of years. Management is considering switching to the à la carte model but faces challenges in predicting monthly revenue. They have requested a service that can predict the revenue for the following month and provide projections for specific countries, focusing on the ten countries with the highest revenue.
 
@@ -58,7 +58,7 @@ The primary business opportunity is to create a predictive model that accurately
    - Develop a time-series model to predict monthly revenue and evaluate its accuracy.
 
 
-#### **1.1. State the ideal data to address the business opportunity and clarify the rationale for needing specific data.**
+#### **State the ideal data to address the business opportunity and clarify the rationale for needing specific data.**
    - The `fetch_data` function in `cslib.py` is designed to load and preprocess the transaction-level data, ensuring it is in the correct format for analysis.
    - **cslib.py:**
      ```python
@@ -66,7 +66,7 @@ The primary business opportunity is to create a predictive model that accurately
      ```
 
 
-#### **1.2. Create a python script to extract relevant data from multiple data sources, automating the process of data ingestion.**
+#### **Create a python script to extract relevant data from multiple data sources, automating the process of data ingestion.**
    - The `fetch_ts` function in `cslib.py` automates the process of loading and preprocessing the time-series data from multiple JSON files.
    - **cslib.py:**
      ```python
@@ -74,7 +74,7 @@ The primary business opportunity is to create a predictive model that accurately
      ```
 
 
-#### **1.3. Investigate the relationship between the relevant data, the target and the business metric.**
+#### **Investigate the relationship between the relevant data, the target and the business metric.**
    - The `convert_to_ts` function in `cslib.py` converts the transaction-level data into a time-series format, which can then be used for exploratory data analysis (EDA) and modeling.
    - **cslib.py:**
      ```python
@@ -82,7 +82,7 @@ The primary business opportunity is to create a predictive model that accurately
      ```
 
 
-#### **1.4. Articulate your findings using a deliverable with visualizations.**
+#### **Articulate your findings using a deliverable with visualizations.**
 
 [Exploratory Analysis Script](scripts/exploratory_analysis.py)
 
@@ -165,8 +165,6 @@ The primary business opportunity is to create a predictive model that accurately
 The dataset is complete with no missing values, making it suitable for analysis. The distributions of purchases, unique invoices, unique streams, total views, and revenue all exhibit right-skewed patterns, indicating that most days have low activity with occasional high activity days. This variability highlights the importance of identifying the factors driving high activity days to optimize business strategies and improve overall performance.
 
 
-## Part 2
-
 ### **State the different modeling approaches that you will compare to address the business opportunity.**
 
 The use of `RandomForestRegressor` and `GridSearchCV` in the `model.py` script is well-aligned with our hypothesis and findings from the exploratory data analysis (EDA). The `RandomForestRegressor` is a robust ensemble learning method that can handle the variability and complexity in the data, as evidenced by the right-skewed distributions and occasional high activity days observed in the EDA. It can effectively capture non-linear relationships and interactions between features, which is crucial for accurately predicting revenue trends. Additionally, `GridSearchCV` helps in optimizing the model's hyperparameters, ensuring that we achieve the best possible performance. This approach leverages the strengths of ensemble methods and systematic hyperparameter tuning to build a reliable and accurate model for predicting monthly revenue trends, addressing the business opportunity effectively.
@@ -198,9 +196,9 @@ To improve the model's performance and reduce the gap between actual and predict
   
 ![alt](scripts/visualizations/revenue_projection_vs_actual.png)
 
-## Part 3
 
-### API designed - 
+
+## API designed - 
 [api.py](scripts/api.py)
 
 ### API Endpoints - 
@@ -222,27 +220,21 @@ Created a [dockerfile](Dockerfile) for deployment and tested APIs with [testclie
 #### Findings
 
 1. **Prediction Consistency:**
-   - The `Predictions DataFrame` shows that the model predicts the same revenue value (`127241.704245`) for all 30 days in August 2019. This indicates a lack of variability in the model's predictions, suggesting that the model might not be capturing the underlying patterns in the data effectively.
+   - The `Predictions DataFrame` shows that the model predicts the same revenue value for any date rage of August 2019 and for both models (RF and LSTM). This indicates a lack of variability in the model's predictions, suggesting that the model **might not be capturing the underlying patterns in the data effectively**.
 
-2. **Actual Revenue Variability:**
-   - The `Actuals DataFrame` shows significant variability in daily revenue, ranging from negative values (e.g., `-185.12` on 2019-08-09) to high values (e.g., `54695.21` on 2019-08-21). This variability highlights the dynamic nature of the revenue data, which the current model fails to capture.
-
-3. **Model Performance:**
+2. **Model Performance:**
    - The large discrepancy between the predicted and actual revenue values indicates that the model is not performing well. The model's inability to predict the variability in revenue suggests that it may be overfitting or underfitting the data.
 
 #### Recommendations
 
-1. **Hyperparameter Tuning:**
-   - Implement additional hyperparameter tuning for the `RandomForestRegressor` to improve model performance. Consider tuning parameters such as `n_estimators`, `max_depth`, `min_samples_split`, `min_samples_leaf`, and `max_features`.
-
-2. **Feature Engineering:**
-   - Enhance feature engineering by adding more relevant time-series features, such as moving averages, rolling statistics, and additional lag features. This can help the model capture the underlying patterns in the data more effectively.
+1. **Feature Engineering:**
+   - I have not implemented enhanced feature engineering by adding more relevant time-series features, such as moving averages, rolling statistics, and additional lag features. This might help the model capture the underlying patterns in the data more effectively.
 
 3. **Data Quality Improvement:**
-   - Perform data cleaning to handle missing values, outliers, and inconsistencies. Ensure that the dataset is complete and consistent over time.
+   - Need perform more data cleaning to handle missing values, outliers, and inconsistencies. Ensure that the dataset is complete and consistent over time.
 
 4. **Alternative Models:**
-   - Consider exploring alternative time-series models, such as ARIMA, SARIMA, or LSTM, which might be better suited for capturing the temporal dependencies and variability in the revenue data.
+   - I have tried RF and LSTM, should consider exploring alternative time-series models, such as ARIMA, SARIMA which might be better suited for capturing the temporal dependencies and variability in the revenue data.
 
 #### Conclusion
 
