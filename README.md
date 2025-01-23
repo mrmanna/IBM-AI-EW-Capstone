@@ -207,7 +207,7 @@ To improve the model's performance and reduce the gap between actual and predict
 - GET `/logs`
  
 ## Deployment & Test
-Created a [dockerfile](Dockerfile) for deployment and tested APIs with [testclient](testclient/test_api.py))
+Created a [dockerfile](Dockerfile) for deployment and tested APIs with [testclient](scripts/test_api.py))
 
 ## Post Product Script
 
